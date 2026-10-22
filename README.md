@@ -112,6 +112,15 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 npm run build
 ```
 
+### 5. Vercel Deployment
+The repository includes a ready-to-use `.npmrc` (`legacy-peer-deps=true`) and `vercel.json` (`outputDirectory: "dist"` with SPA rewrite rules).
+When importing the Git repo to Vercel:
+- **Framework Preset:** Vite
+- **Root Directory:** `./`
+- **Build Command:** `npm run build`
+- **Output Directory:** `dist`
+- **Install Command:** `npm install` (handled automatically with `.npmrc`)
+
 ---
 
 ## 🔐 Administrative Onboarding Procedure
