@@ -1,0 +1,1817 @@
+MASTER WEBSITE DEVELOPMENT PROMPT — F&J WORKFORCE LIMITED
+
+1. ROLE
+
+Act as a senior full-stack software engineer, UI/UX designer, recruitment technology architect, database engineer, and DevOps specialist. You have extensive experience building enterprise-grade recruitment platforms, applicant tracking systems (ATS), job portals, and corporate workforce websites using modern web technologies.
+
+Build a complete, production-ready, multi-page workforce website and recruitment management platform for F&J Workforce Limited, a workforce solutions and recruitment company based in Ibeju-Lekki, Lagos State, Nigeria.
+
+This is a real, functional web application, not a static design, landing-page prototype, or frontend-only mockup. All specified features must be implemented and connected to the backend.
+
+2. AUDIENCE
+
+The platform serves four primary audiences:
+
+Job seekers: People who want to create accounts, complete professional profiles, upload CVs, discover vacancies, and apply for jobs.
+
+Employers and corporate clients: Organizations seeking qualified workers, staffing services, recruitment support, and workforce management solutions.
+
+Recruitment officers: Authorized F&J Workforce personnel responsible for reviewing applications, shortlisting candidates, and managing recruitment activities.
+
+Administrators: Authorized management personnel responsible for controlling website content, services, job vacancies, registered users, applications, and platform settings.
+
+Design the experience so that first-time visitors can immediately understand the company's services and find the appropriate action without confusion.
+
+3. PRIMARY GOAL
+
+Build an attractive, credible, fast, secure, and fully functional workforce website that establishes F&J Workforce Limited as a professional staffing and recruitment partner.
+
+The website must combine:
+
+A polished corporate website.
+
+A multi-page services and company-information section.
+
+A complete job vacancy portal.
+
+Candidate registration and authentication.
+
+Online job applications and CV uploads.
+
+An administrative recruitment dashboard.
+
+Employer staffing-request forms.
+
+Secure Supabase database integration.
+
+Production-ready deployment on Vercel.
+
+Every navigation link must lead to its own dedicated page. Every form, button, menu, filter, dashboard action, and user account feature must work as intended.
+
+Do not use placeholder links, fake application submissions, static dashboard statistics presented as real data, or nonfunctional buttons.
+
+4. BRAND IDENTITY AND VISUAL DIRECTION
+
+Official brand colours
+
+Use the following colours consistently throughout the platform.
+
+Deep Navy Blue — Primary: Use the established F&J Workforce brand's Deep Navy Blue as the main corporate colour. Confirm its exact hexadecimal value from the existing logo or approved brand assets before implementation; do not invent a new official hex code.
+
+Primary Green: #045B0D
+
+Bright Green — Secondary: #11851E
+
+White — Neutral: #FFFFFF
+
+Use navy blue for primary branding, navigation, important headings, and selected backgrounds. Use the primary green for professional brand accents and selected calls to action. Use bright green sparingly for highlights, positive states, and interactive accents. Use white and subtle neutral backgrounds for readability.
+
+Maintain accessible colour contrast. Do not place bright green text on white where the contrast is insufficient.
+
+Design philosophy
+
+Create a premium, modern corporate identity that feels trustworthy, organized, human-centered, and established.
+
+Avoid generic recruitment website templates, excessive gradients, oversized rounded cards, random decorative blobs, unnecessary glassmorphism, cartoon illustrations, and repetitive stock-photo layouts.
+
+Use:
+
+A strong editorial layout with a clear visual hierarchy.
+
+Generous whitespace and carefully controlled content density.
+
+Professional photography featuring real-world workplaces, manufacturing, logistics, industrial operations, and diverse professionals.
+
+Purposeful asymmetrical layouts where appropriate.
+
+Fine borders, restrained shadows, and consistent spacing.
+
+Clear calls to action and intuitive navigation.
+
+Subtle hover effects and smooth transitions.
+
+Consistent iconography and reusable design components.
+
+Professional empty states, loading states, success messages, and error feedback.
+
+The result should feel custom-designed for F&J Workforce Limited rather than copied from a generic job portal.
+
+Typography
+
+Use:
+
+Manrope: Headings, page titles, section headings, and prominent statistics.
+
+Inter: Body text, navigation, forms, job descriptions, tables, and dashboard interfaces.
+
+Use a clear type scale, readable line lengths, consistent font weights, and responsive typography.
+
+Do not use restaurant-themed typography. The brand is a workforce and recruitment business.
+
+Responsive design
+
+Follow a mobile-first approach and optimize for:
+
+Mobile phones.
+
+Tablets.
+
+Laptops.
+
+Desktop monitors.
+
+The navigation, application forms, candidate dashboard, employer forms, and administrative dashboard must remain usable on small screens.
+
+5. REQUIRED TECHNOLOGY STACK
+
+Use the following architecture unless a genuine technical constraint requires an equivalent solution.
+
+Frontend and application framework
+
+Next.js using the App Router.
+
+React.
+
+TypeScript with strict type checking.
+
+Tailwind CSS.
+
+Reusable, accessible UI components.
+
+Lucide icons or another consistent professional icon library.
+
+Backend and database
+
+Supabase PostgreSQL for persistent data.
+
+Supabase Auth for registration, login, email verification, and password recovery.
+
+Supabase Storage for CVs and authorized recruitment documents.
+
+Supabase Row Level Security (RLS) for data access control.
+
+Server-side validation and secure server-side operations.
+
+Deployment
+
+Vercel for production hosting.
+
+Supabase as the managed backend.
+
+Environment variables for credentials and configuration.
+
+Git-based deployment compatibility.
+
+Use stable, mutually compatible package versions. Do not use deprecated APIs or undocumented platform features.
+
+6. MULTI-PAGE WEBSITE STRUCTURE
+
+Create a shared public header and footer. Every main navigation item must have its own page, and dropdown links must lead to distinct routes.
+
+A. Home — /
+
+Create a polished homepage with the following sections.
+
+Hero section
+
+A compelling headline communicating workforce solutions and recruitment expertise.
+
+Suggested headline: “Building Stronger Workforces. Connecting Talent with Opportunity.”
+
+Supporting copy explaining how F&J Workforce connects qualified candidates with employers and supports businesses with reliable staffing solutions.
+
+Primary CTA: “Explore Job Opportunities.”
+
+Secondary CTA: “Request Workforce Solutions.”
+
+A professional, high-quality workplace or industrial recruitment image.
+
+A restrained visual composition using the official brand palette.
+
+Trust and capability section
+
+Introduce the company’s workforce expertise.
+
+Highlight its commitment to dependable staffing, quality recruitment, professional standards, and client satisfaction.
+
+Use genuine, verifiable company statistics only. If statistics have not been supplied, omit them or show clearly marked placeholders in the development environment.
+
+Services overview
+
+Display the company's principal services in a carefully designed grid.
+
+Each service card must link to its dedicated service page.
+
+Latest vacancies
+
+Retrieve published job vacancies from Supabase.
+
+Display job title, employment type, location, department or industry, and publication date.
+
+Include “View Details” and “Apply Now” actions.
+
+Display a meaningful empty state when no jobs are available.
+
+Provide a link to browse all vacancies.
+
+How recruitment works
+
+Explain the candidate journey: register, complete profile, discover jobs, apply, and track application status.
+
+Employer CTA
+
+Invite organizations to submit staffing requirements.
+
+Include a link to the employer enquiry page.
+
+Testimonials
+
+Only show verified, authorized testimonials.
+
+Do not invent client names, quotations, or endorsements.
+
+Final CTA
+
+Encourage job seekers to register and employers to contact the company.
+
+B. About Us — /about
+
+Include:
+
+Company introduction.
+
+Mission.
+
+Vision.
+
+Core values.
+
+Recruitment philosophy.
+
+Commitment to employers and candidates.
+
+Quality, professionalism, safety, and responsible workforce practices.
+
+A company history section populated with approved information.
+
+A CTA to explore services or contact the team.
+
+Do not fabricate founding dates, certifications, client partnerships, or company achievements.
+
+C. Services — /services
+
+Create a dedicated services overview page describing the company’s workforce solutions.
+
+Each service must have its own page, with its own content, CTA, and relevant enquiry form.
+
+Include the following proposed service categories, subject to confirmation against the company's actual offerings:
+
+Recruitment and talent acquisition.
+
+Temporary and contract staffing.
+
+Permanent placement.
+
+Industrial and factory workforce solutions.
+
+Workforce outsourcing.
+
+HR and workforce management support.
+
+Service pages should explain the business problem addressed, service process, intended clients, benefits, and how to request assistance.
+
+Required routes:
+
+/services/recruitment
+
+/services/contract-staffing
+
+/services/permanent-placement
+
+/services/industrial-workforce
+
+/services/workforce-outsourcing
+
+/services/hr-support
+
+The administrator should be able to edit service descriptions and publish or unpublish service pages from the dashboard.
+
+Do not advertise unverified services as established offerings. Allow management to enable only the services the company actually provides.
+
+D. Careers / Find Jobs — /jobs
+
+Build a functional job search portal connected to Supabase.
+
+Include:
+
+Search by job title or keyword.
+
+Filters for location, industry, employment type, and date posted.
+
+Sorting by newest and other relevant criteria.
+
+Pagination or efficient incremental loading.
+
+Clear job cards.
+
+Job availability status.
+
+Responsive filters and search controls.
+
+A visible “Clear Filters” action.
+
+Meaningful loading, empty, and error states.
+
+Only active, published vacancies should be publicly accessible.
+
+E. Job Details — /jobs/[slug]
+
+Each vacancy must have a dedicated URL.
+
+Display:
+
+Job title.
+
+Employer or hiring organization, when approved for publication.
+
+Location.
+
+Employment type.
+
+Department or industry.
+
+Date posted.
+
+Application deadline.
+
+Job overview.
+
+Responsibilities.
+
+Required qualifications.
+
+Required experience.
+
+Skills and other requirements.
+
+Application instructions.
+
+Apply button.
+
+The application deadline and vacancy status must be validated on the server. Expired, closed, or unpublished jobs must not accept new applications.
+
+Require candidate authentication before applying. If a visitor is not logged in, redirect them to registration or login and return them to the intended job afterward.
+
+F. Candidate Registration — /register
+
+Allow job seekers to create accounts using:
+
+Full name.
+
+Email address.
+
+Phone number.
+
+Password.
+
+Password confirmation.
+
+Acceptance of the privacy notice and terms of use.
+
+Requirements:
+
+Secure password handling through Supabase Auth.
+
+Email verification.
+
+Duplicate-account handling.
+
+Clear password requirements.
+
+Password visibility toggle.
+
+Inline validation and accessible error messages.
+
+A loading state during submission.
+
+A success message and verification instructions.
+
+Protection against automated abuse where appropriate.
+
+Do not store plaintext passwords in the database.
+
+Candidate registration must never grant administrative privileges.
+
+G. Candidate Login — /login
+
+Include:
+
+Email and password authentication.
+
+Password visibility toggle.
+
+Remember-session behavior using supported secure authentication mechanisms.
+
+Forgot-password link.
+
+Email verification guidance.
+
+Clear invalid-credentials and network-error messages.
+
+Redirects appropriate to the user's authorized role.
+
+Use secure session management and supported Supabase SSR authentication patterns.
+
+H. Forgot and Reset Password — /forgot-password and /reset-password
+
+Implement functional password recovery using Supabase Auth.
+
+Validate recovery tokens, handle expired or invalid links, and display appropriate success and error messages.
+
+Never expose whether an unrelated user's email account exists unnecessarily.
+
+I. Candidate Dashboard — /candidate/dashboard
+
+Create a protected dashboard accessible only to authenticated candidates.
+
+Include:
+
+Welcome message.
+
+Profile completion indicator.
+
+Candidate profile information.
+
+CV upload and replacement.
+
+Education and qualifications.
+
+Work experience.
+
+Skills.
+
+Preferred locations and employment types.
+
+Saved jobs.
+
+Applied jobs.
+
+Application status tracking.
+
+Account settings.
+
+Password recovery or change workflow through supported authentication mechanisms.
+
+Candidates must only be able to view and edit their own authorized information.
+
+J. Candidate Profile — /candidate/profile
+
+Provide a dedicated profile editor.
+
+Allow candidates to manage their personal and professional details and upload a CV in supported formats such as PDF and DOCX, subject to secure file validation.
+
+Requirements:
+
+File size limits.
+
+MIME type and file validation.
+
+Private storage for CVs.
+
+Secure download access.
+
+Replacement and deletion workflows.
+
+Confirmation before destructive actions.
+
+A clear save-success message.
+
+Do not expose CV file URLs publicly.
+
+K. Job Application — /jobs/[slug]/apply
+
+Create a complete, secure job application form.
+
+Collect:
+
+Candidate name and contact details, prefilled from the candidate profile.
+
+CV or résumé.
+
+Relevant work experience.
+
+Education and qualifications.
+
+Skills.
+
+Cover letter or motivation statement.
+
+Relevant screening questions configured for the vacancy.
+
+Consent to process personal data for recruitment purposes.
+
+Validate mandatory fields on both the client and server.
+
+Prevent duplicate applications for the same vacancy unless management has explicitly configured an appropriate exception.
+
+After successful submission:
+
+Save the application in Supabase.
+
+Display a confirmation message.
+
+Provide an application reference or identifier.
+
+Show the application in the candidate dashboard.
+
+Notify authorized recruitment staff using a configured email service, if enabled.
+
+Do not claim an email was sent unless the sending service confirms success.
+
+L. Employers — /employers
+
+Create a dedicated employer-facing page explaining how F&J Workforce can help businesses find and manage suitable workers.
+
+Include:
+
+Business-focused introduction.
+
+Staffing and recruitment capabilities.
+
+Industries served, where confirmed.
+
+Recruitment process.
+
+Client benefits.
+
+Frequently asked questions.
+
+CTA to request staffing assistance.
+
+M. Request Staff — /request-staff
+
+Create a dedicated employer enquiry form collecting:
+
+Company name.
+
+Contact person's name.
+
+Business email.
+
+Phone number.
+
+Industry.
+
+Type of staffing service required.
+
+Number of workers needed.
+
+Job roles.
+
+Location.
+
+Expected start date.
+
+Additional requirements.
+
+Validate and securely store enquiries in Supabase.
+
+Show an accurate confirmation after successful submission and provide the enquiry in the admin dashboard.
+
+N. Contact Us — /contact
+
+Display the company's contact details and a working contact form.
+
+Official contact information
+
+Email: info@fjworkforce.com.ng
+
+Phone: 09116176563
+
+Alternative phone: 09022542150
+
+Office address: Eleko Beach Road, Ibeju-Lekki, Lagos State, Nigeria.
+
+Contact form fields:
+
+Full name.
+
+Email.
+
+Phone, optional.
+
+Subject.
+
+Message.
+
+Save submitted enquiries in Supabase and provide authorized staff with a dashboard view. Integrate email notifications only when a supported email provider has been configured.
+
+Include clickable email and telephone links and a map or directions link if the exact office location is verified.
+
+O. Privacy Policy — /privacy
+
+Create a professionally structured privacy policy covering:
+
+Personal information collected.
+
+Purposes of processing.
+
+Recruitment data.
+
+CV and document handling.
+
+Legal basis and consent where applicable.
+
+Data retention.
+
+Access restrictions.
+
+Third-party processors.
+
+Security practices.
+
+Candidate rights and contact procedures.
+
+Align the policy with applicable Nigerian data protection requirements, including the Nigeria Data Protection Act 2023 where applicable. Obtain appropriate legal review before publication.
+
+P. Terms of Use — /terms
+
+Include account responsibilities, acceptable use, recruitment application conditions, intellectual property, website availability, and appropriate disclaimers.
+
+Q. Frequently Asked Questions — /faq
+
+Create searchable or categorized FAQs for candidates and employers.
+
+Cover registration, applying for jobs, CV uploads, application status, recruitment processes, employer enquiries, and account security.
+
+Allow administrators to manage FAQ content.
+
+7. NAVIGATION AND FOOTER
+
+Header navigation
+
+Create a professional responsive navigation bar containing:
+
+Home
+
+About Us
+
+Services — functional dropdown
+
+Find Jobs
+
+Employers
+
+Contact Us
+
+Login
+
+Register
+
+After authentication, replace Login and Register with the relevant account menu.
+
+The Services dropdown must lead to the dedicated service pages described above.
+
+On mobile, use an accessible mobile navigation menu with proper keyboard support, clear focus states, and appropriate open/close behavior.
+
+Use sticky navigation only if it improves the experience and does not obscure page content.
+
+Global footer
+
+Display the following contact information in the footer of all public pages:
+
+F&J Workforce Limited
+
+Email: info@fjworkforce.com.ng
+
+Phone: 09116176563
+
+Alternative phone: 09022542150
+
+Office: Eleko Beach Road, Ibeju-Lekki, Lagos State, Nigeria.
+
+Include:
+
+Company links.
+
+All major service links.
+
+Careers and job portal links.
+
+Employer enquiry link.
+
+Contact link.
+
+Privacy Policy.
+
+Terms of Use.
+
+Social media links only for verified company accounts.
+
+Copyright notice with the current year.
+
+Use clear spacing, high contrast, and a branded navy-and-green footer.
+
+Floating WhatsApp button
+
+Integrate a fixed floating WhatsApp contact button on all appropriate public pages.
+
+WhatsApp number: 09022542150
+
+Use the international format for Nigeria: 2349022542150, without the leading zero or plus sign in the WhatsApp URL.
+
+WhatsApp destination:
+
+https://wa.me/2349022542150
+
+Use a short, professional prefilled message such as:
+
+“Hello F&J Workforce Limited, I would like to make an enquiry about your workforce solutions.”
+
+Requirements:
+
+Use the official WhatsApp icon.
+
+Keep the button visible but unobtrusive.
+
+Provide an accessible label such as “Chat with F&J Workforce on WhatsApp.”
+
+Support keyboard navigation and visible focus.
+
+Ensure the button does not cover important mobile controls.
+
+Open the correct WhatsApp conversation link.
+
+Do not fabricate a chatbot or imply that the WhatsApp number is automatically staffed around the clock.
+
+8. ADMINISTRATIVE DASHBOARD
+
+Create a fully functional, private administrative dashboard under /admin.
+
+This dashboard is a core requirement, not an optional design concept.
+
+Administrator authentication
+
+Use Supabase Auth with a verified administrator account and server-validated role permissions.
+
+The requested initial password reference is F&Jworkforce. Treat this only as a setup reference, not a password to hardcode into the application. Configure the administrator account through a secure setup process, preferably an invitation or password-reset flow that requires the administrator to establish a strong, unique password.
+
+Never:
+
+Hardcode admin passwords in source code.
+
+Store plaintext passwords in database tables.
+
+rely on hiding an admin button as a security measure.
+
+allow users to grant themselves admin access.
+
+put the Supabase service-role key in browser code.
+
+expose admin credentials in Git, frontend bundles, or public environment variables.
+
+If an administrator account does not yet exist, provide secure setup instructions rather than silently creating a public backdoor.
+
+Dashboard overview
+
+Display live metrics retrieved from Supabase, including:
+
+Total registered candidates.
+
+Active job vacancies.
+
+Total applications.
+
+New applications awaiting review.
+
+Shortlisted candidates.
+
+Employer enquiries.
+
+Contact messages.
+
+Recently published vacancies.
+
+Recent application activity.
+
+Use accurate database counts and useful date filters. Do not hardcode sample statistics as real figures.
+
+Job vacancy management
+
+This is a primary administrative function.
+
+Allow authorized administrators to:
+
+Create new vacancies.
+
+Edit existing vacancies.
+
+Save drafts.
+
+Preview vacancies before publication.
+
+Publish and unpublish vacancies.
+
+Set application deadlines.
+
+Close vacancies.
+
+Reopen eligible vacancies.
+
+Delete vacancies with confirmation and appropriate safeguards.
+
+Search, filter, sort, and paginate vacancy records.
+
+Upload an optional job image or document if the platform supports it.
+
+View the public job detail page.
+
+Each vacancy should support:
+
+Job title.
+
+URL slug.
+
+Department.
+
+Industry.
+
+Employment type.
+
+Work location.
+
+Work arrangement.
+
+Salary range, optional.
+
+Job summary.
+
+Job description.
+
+Responsibilities.
+
+Qualifications.
+
+Experience requirements.
+
+Skills.
+
+Application deadline.
+
+Publication status.
+
+Date created and updated.
+
+Created by.
+
+Publication date.
+
+Use a rich-text editor or a carefully designed structured content editor. Sanitize user-generated HTML and prevent stored cross-site scripting.
+
+Public users must only see eligible published vacancies. Drafts and administrative records must remain private.
+
+Application management
+
+Allow authorized staff to:
+
+View applications.
+
+Search and filter applications.
+
+Open candidate profiles.
+
+Access CVs securely.
+
+Review application answers.
+
+Change application status.
+
+Add private recruiter notes.
+
+Record review dates.
+
+Shortlist candidates.
+
+Reject applications.
+
+Mark candidates as interviewed or hired.
+
+Export authorized application data where appropriate.
+
+Use a defined application-status workflow, for example:
+
+Submitted.
+
+Under Review.
+
+Shortlisted.
+
+Interview Scheduled.
+
+Interviewed.
+
+Offered.
+
+Hired.
+
+Rejected.
+
+Withdrawn.
+
+Record status changes with timestamps and the authorized staff member responsible.
+
+Do not expose internal recruiter notes to candidates.
+
+Candidate management
+
+Allow authorized administrators to:
+
+View registered candidates.
+
+Search by name, skills, location, or other permitted fields.
+
+Open candidate profiles.
+
+Review CVs using secure access.
+
+View application history.
+
+Filter candidates.
+
+Update internal recruitment notes.
+
+Apply appropriate account restrictions where necessary.
+
+Protect candidate privacy. Only expose personal information to authorized personnel who need it for recruitment.
+
+Employer enquiry management
+
+Create a dashboard section for staffing requests and employer enquiries.
+
+Allow authorized staff to:
+
+View new requests.
+
+Open enquiry details.
+
+Update enquiry status.
+
+Assign a responsible team member if assignment functionality is implemented.
+
+Add internal notes.
+
+Record follow-up actions.
+
+Search and filter enquiries.
+
+Archive or close resolved requests.
+
+Content management
+
+Allow administrators to manage:
+
+About Us content.
+
+Service pages.
+
+Frequently asked questions.
+
+Homepage sections.
+
+Testimonials, with appropriate verification.
+
+Public contact details.
+
+Footer links.
+
+Job-related content.
+
+Validate content before saving and provide a preview where appropriate.
+
+Administrative settings
+
+Include authorized controls for:
+
+Profile and account settings.
+
+Password reset.
+
+User roles and permissions, restricted to authorized administrators.
+
+Vacancy categories and employment types.
+
+Notification preferences.
+
+Application settings.
+
+Website configuration.
+
+Destructive operations must require confirmation. Sensitive administrative actions should be logged.
+
+9. SUPABASE DATABASE DESIGN
+
+Use Supabase PostgreSQL with proper relationships, constraints, indexes, timestamps, and Row Level Security.
+
+Create version-controlled SQL migrations in the project repository. Document the setup and migration process.
+
+Use UUID primary keys where appropriate, foreign keys, unique constraints, appropriate indexes, and created_at and updated_at timestamps.
+
+Required tables
+
+1. profiles
+
+Stores user profile information associated with auth.users.
+
+Suggested fields:
+
+id — UUID, primary key referencing auth.users.id.
+
+full_name.
+
+phone.
+
+avatar_path, optional.
+
+created_at.
+
+updated_at.
+
+2. user_roles
+
+Stores authorized role assignments.
+
+Suggested fields:
+
+id.
+
+user_id.
+
+role, such as candidate, recruiter, or admin.
+
+created_at.
+
+Use controlled role assignment and strict access policies. Candidate registration must not allow users to assign themselves privileged roles.
+
+3. candidate_profiles
+
+Stores recruitment-specific candidate information.
+
+Suggested fields:
+
+id.
+
+user_id.
+
+professional_summary.
+
+education, using a validated structure or normalized related tables.
+
+work_experience, using a validated structure or normalized related tables.
+
+skills.
+
+preferred_locations.
+
+preferred_employment_types.
+
+cv_storage_path.
+
+profile_completion.
+
+created_at.
+
+updated_at.
+
+4. jobs
+
+Stores vacancies.
+
+Suggested fields:
+
+id.
+
+title.
+
+slug.
+
+department.
+
+industry.
+
+employment_type.
+
+work_location.
+
+work_arrangement.
+
+salary_min, optional.
+
+salary_max, optional.
+
+currency, where applicable.
+
+summary.
+
+description.
+
+responsibilities.
+
+qualifications.
+
+experience_requirements.
+
+skills.
+
+application_deadline.
+
+status, such as draft, published, or closed.
+
+published_at.
+
+created_by.
+
+created_at.
+
+updated_at.
+
+Use a unique slug and validate publication and deadline rules.
+
+5. applications
+
+Stores candidate job applications.
+
+Suggested fields:
+
+id.
+
+job_id.
+
+candidate_id.
+
+cv_storage_path.
+
+cover_letter.
+
+screening_answers.
+
+status.
+
+submitted_at.
+
+updated_at.
+
+Add a unique constraint on the candidate and job combination unless an explicitly designed reapplication workflow requires otherwise.
+
+6. application_notes
+
+Stores private recruitment notes.
+
+Suggested fields:
+
+id.
+
+application_id.
+
+author_id.
+
+note.
+
+created_at.
+
+Only authorized recruitment staff should access these records.
+
+7. application_status_history
+
+Records application status transitions.
+
+Suggested fields:
+
+id.
+
+application_id.
+
+previous_status.
+
+new_status.
+
+changed_by.
+
+changed_at.
+
+Prevent candidates from forging or modifying administrative status history.
+
+8. employer_enquiries
+
+Stores staffing requests and employer leads.
+
+Suggested fields:
+
+id.
+
+company_name.
+
+contact_name.
+
+email.
+
+phone.
+
+industry.
+
+service_requested.
+
+workers_required.
+
+job_roles.
+
+location.
+
+expected_start_date.
+
+requirements.
+
+status.
+
+assigned_to, optional.
+
+created_at.
+
+updated_at.
+
+9. contact_messages
+
+Stores contact-form submissions.
+
+Suggested fields:
+
+id.
+
+name.
+
+email.
+
+phone, optional.
+
+subject.
+
+message.
+
+status.
+
+created_at.
+
+10. services
+
+Stores editable service-page content.
+
+Suggested fields:
+
+id.
+
+title.
+
+slug.
+
+summary.
+
+content.
+
+is_published.
+
+sort_order.
+
+created_at.
+
+updated_at.
+
+11. faqs
+
+Stores frequently asked questions.
+
+Suggested fields:
+
+id.
+
+question.
+
+answer.
+
+category.
+
+is_published.
+
+sort_order.
+
+created_at.
+
+updated_at.
+
+12. audit_logs
+
+Records important administrative actions, including job publication, role changes, and sensitive recruitment decisions.
+
+Suggested fields:
+
+id.
+
+actor_id.
+
+action.
+
+entity_type.
+
+entity_id.
+
+metadata, limited to appropriate non-sensitive information.
+
+created_at.
+
+Restrict modification and deletion of audit records. Never store passwords, authentication tokens, CV contents, or other unnecessary sensitive data in logs.
+
+Add further normalized tables where needed, such as candidate education and work experience, if this improves data integrity.
+
+Database and storage security
+
+Enable Row Level Security on every table exposed through the Supabase Data API.
+
+Policies must enforce:
+
+Candidates can read and update only their own permitted profile information.
+
+Candidates can create applications only for themselves.
+
+Candidates can view only their own application records.
+
+Candidates cannot edit administrative application statuses.
+
+Public users can read only published, eligible vacancies and public service content.
+
+Contact and employer enquiries cannot be publicly listed or read.
+
+Recruiter access is restricted to explicitly authorized recruitment functions.
+
+Administrator privileges are verified through a secure, trusted role mechanism.
+
+Unauthorized users cannot read CVs or internal notes.
+
+Use private Supabase Storage buckets for CVs and sensitive documents. Enforce file size and type restrictions, authorize uploads and downloads, and use short-lived signed URLs where appropriate.
+
+Do not trust a client-supplied user ID, role, status, or record ownership field. Enforce authorization on the server and in database policies.
+
+10. AUTHENTICATION AND AUTHORIZATION
+
+Implement secure authentication with Supabase Auth and supported Next.js server-side session handling.
+
+Required features:
+
+Candidate registration.
+
+Email verification.
+
+Login and logout.
+
+Password recovery.
+
+Session refresh.
+
+Protected candidate routes.
+
+Protected admin routes.
+
+Role-based access control.
+
+Secure redirects.
+
+Server-side authorization checks.
+
+Use an established Supabase SSR integration appropriate to the installed package version.
+
+The admin dashboard must require both an authenticated session and an authorized administrative role.
+
+A user must not gain access to /admin simply by changing a URL or modifying frontend state.
+
+Keep privileged database operations on the server and use the Supabase service-role key only in trusted server-side execution contexts. Never expose it through NEXT_PUBLIC_* variables.
+
+11. APPLICATION AND EMAIL NOTIFICATIONS
+
+Build a notification system that can be enabled when the required provider credentials are supplied.
+
+Potential notifications:
+
+Candidate account verification.
+
+Password recovery.
+
+Successful job application.
+
+Application-status updates.
+
+New application alerts for recruitment staff.
+
+New employer enquiries.
+
+Contact-form notifications.
+
+Use a supported transactional email provider, such as Resend, if configured.
+
+Implement:
+
+Server-side email sending.
+
+Environment-based credentials.
+
+Input validation.
+
+Error handling.
+
+Appropriate rate limiting.
+
+Retry handling or a queue for critical notifications where necessary.
+
+The platform must remain functional when email notifications are not configured. Clearly document the missing configuration and never simulate successful delivery.
+
+12. SECURITY AND DATA PROTECTION
+
+Treat security as a core requirement.
+
+Implement:
+
+Server-side validation using a schema-validation library such as Zod.
+
+Database Row Level Security.
+
+Secure authentication and session handling.
+
+Rate limiting for authentication and public submission endpoints.
+
+Spam protection for contact and employer forms.
+
+File upload restrictions.
+
+Safe output rendering and HTML sanitization.
+
+Secure error handling without leaking stack traces or credentials.
+
+Appropriate security headers.
+
+Dependency checks and input validation.
+
+Protection against unauthorized role escalation.
+
+Audit logging for sensitive administrative actions.
+
+Backup and recovery guidance.
+
+Collect only the personal data necessary for recruitment. Provide clear privacy information, retention procedures, and an appropriate process for candidate data-access or deletion requests, subject to applicable legal requirements.
+
+Never publish private CVs, candidate email addresses, phone numbers, application details, or internal recruiter notes.
+
+13. UI/UX AND INTERACTION REQUIREMENTS
+
+Every page must be designed intentionally, with its own relevant content and clear user journey.
+
+Implement:
+
+Reusable page layouts and components.
+
+Consistent navigation.
+
+Responsive menus.
+
+Accessible forms and validation.
+
+Skeleton loading states where useful.
+
+Empty states with actionable guidance.
+
+Clear success and error feedback.
+
+Confirmation dialogs for destructive actions.
+
+Search, filtering, sorting, and pagination.
+
+Accessible keyboard navigation.
+
+Visible focus indicators.
+
+Semantic HTML and appropriate ARIA attributes.
+
+Subtle, performance-conscious animation.
+
+Reduced-motion support.
+
+Consistent button, form, card, and table styling.
+
+Use server rendering for appropriate public pages and ensure interactive features use suitable client components.
+
+Avoid excessive animation, large JavaScript bundles, layout shifts, and unnecessary third-party scripts.
+
+14. SEO, ACCESSIBILITY, AND PERFORMANCE
+
+Implement:
+
+Page-specific titles and meta descriptions.
+
+Canonical URLs where appropriate.
+
+Open Graph metadata.
+
+XML sitemap.
+
+Robots.txt.
+
+Descriptive image alt text.
+
+Semantic page structure.
+
+Appropriate job-posting structured data for eligible public vacancies.
+
+Fast page loading.
+
+Optimized images.
+
+Lazy loading where appropriate.
+
+Accessible colour contrast.
+
+Keyboard-accessible controls.
+
+Mobile-friendly layouts.
+
+Only advertise currently eligible published vacancies in job structured data. Keep the structured data consistent with the visible job details and follow current search-engine requirements.
+
+15. VERCEL DEPLOYMENT REQUIREMENTS
+
+The project must be prepared for deployment to Vercel without relying on local-only configuration.
+
+Use environment variables such as:
+
+NEXT_PUBLIC_SUPABASE_URL
+
+NEXT_PUBLIC_SUPABASE_ANON_KEY or the supported publishable key for the chosen Supabase setup.
+
+SUPABASE_SERVICE_ROLE_KEY only if strictly required for trusted server-side operations.
+
+RESEND_API_KEY, if Resend is configured.
+
+NEXT_PUBLIC_SITE_URL for the production site URL, where needed.
+
+Use only the public Supabase key in browser-accessible code, together with correct RLS policies. Follow the supported key conventions for the selected Supabase project.
+
+Requirements:
+
+Include a complete .env.example containing variable names and safe placeholders only.
+
+Never commit actual secrets.
+
+Include the database SQL migrations.
+
+Include setup instructions for the Supabase project.
+
+Configure authentication redirect URLs and allowed production origins.
+
+Configure storage buckets and access policies.
+
+Ensure dynamic routes work correctly in production.
+
+Avoid unsupported filesystem assumptions in serverless functions.
+
+Avoid relying on in-memory state for persistent data.
+
+Use compatible package versions and a reproducible lockfile.
+
+Configure appropriate build, lint, and type-check scripts.
+
+Resolve TypeScript errors, dependency errors, missing imports, and build failures.
+
+Verify all environment variables required for production.
+
+Provide a clear deployment guide.
+
+Test the production build before considering the project complete.
+
+Do not expose secrets in logs, build output, client bundles, or public repositories.
+
+16. REQUIRED PROJECT STRUCTURE
+
+Organize the codebase clearly and maintainably.
+
+Suggested structure:
+
+app/ — Public routes, candidate routes, admin routes, API endpoints, and layouts.
+
+components/ — Shared UI components, navigation, footer, forms, job cards, and dialogs.
+
+lib/supabase/ — Supabase browser and server clients.
+
+lib/validations/ — Shared validation schemas.
+
+lib/auth/ — Authentication and authorization utilities.
+
+lib/services/ — Reusable business logic and database operations.
+
+types/ — Database and application types.
+
+supabase/migrations/ — Version-controlled SQL migrations.
+
+public/ — Static assets, logos, and favicon.
+
+tests/ — Automated tests.
+
+.env.example — Required environment-variable template.
+
+README.md — Setup, configuration, development, and deployment instructions.
+
+Adapt the structure where necessary to follow current Next.js conventions. Do not create unnecessary abstraction layers.
+
+17. TESTING AND ACCEPTANCE CRITERIA
+
+Before declaring the website complete, verify the following.
+
+Public website
+
+Every navigation link opens the correct dedicated page.
+
+All service pages render their correct content.
+
+The footer displays the correct contact information.
+
+The WhatsApp button opens the correct number.
+
+All public pages work on mobile and desktop.
+
+Candidate experience
+
+A candidate can register, verify an email, log in, and log out.
+
+Password recovery works.
+
+Candidates can update their own profiles.
+
+CV uploads are validated and private.
+
+Job search and filters return real database records.
+
+Applications are stored correctly.
+
+Duplicate applications are prevented.
+
+Candidates can track their own application statuses.
+
+Candidates cannot access another candidate's records.
+
+Administrative experience
+
+Unauthorized users cannot access protected administrative routes or data.
+
+Authorized administrators can create, edit, publish, close, and unpublish vacancies.
+
+Vacancy changes persist after refresh.
+
+Public job pages reflect eligible published database records.
+
+Administrators can view applications and manage statuses.
+
+Recruiter notes remain private.
+
+Employer enquiries and contact messages are stored securely.
+
+Dashboard statistics are based on real database data.
+
+Administrative actions are appropriately logged.
+
+Deployment
+
+The production build completes successfully.
+
+TypeScript checks pass.
+
+Linting passes.
+
+Database migrations apply successfully.
+
+Authentication redirects work with the production domain.
+
+RLS policies are tested with different user roles.
+
+File upload and access controls are tested.
+
+No secret keys are exposed in frontend bundles.
+
+No required functionality depends on local-only data or a development server.
+
+Use automated tests for critical flows and perform manual verification of the complete candidate and administrator journeys.
+
+Do not mark an untested feature as complete. Document any remaining provider setup or external configuration requirements.
+
+18. IMPLEMENTATION WORKFLOW
+
+Follow this implementation order:
+
+Phase 1 — Foundation
+
+Establish the Next.js, React, TypeScript, and Tailwind project.
+
+Implement the official brand tokens and shared components.
+
+Build the responsive layout, header, navigation, and footer.
+
+Create all required routes.
+
+Phase 2 — Public website
+
+Implement Home, About, Services, individual service pages, Jobs, Employers, Contact, FAQ, Privacy, and Terms.
+
+Connect public content to Supabase where applicable.
+
+Add SEO metadata and responsive states.
+
+Phase 3 — Authentication
+
+Configure Supabase Auth.
+
+Implement registration, verification, login, logout, and password recovery.
+
+Implement secure session handling and protected routes.
+
+Phase 4 — Recruitment database
+
+Create migrations, tables, indexes, constraints, RLS policies, and private storage.
+
+Generate and use accurate database types.
+
+Test role-based access and data ownership.
+
+Phase 5 — Candidate portal
+
+Implement candidate profiles, CV uploads, job applications, saved jobs, and application tracking.
+
+Phase 6 — Administrative dashboard
+
+Implement role-protected administration.
+
+Add vacancy management, application management, candidate management, enquiries, editable content, and dashboard metrics.
+
+Phase 7 — Integrations
+
+Add WhatsApp, transactional email, form notifications, and other explicitly configured services.
+
+Phase 8 — Quality assurance and deployment
+
+Run tests, linting, type checking, and production builds.
+
+Fix errors before deployment.
+
+Configure Vercel and Supabase production settings.
+
+Test the live site and verify all security policies.
+
+Do not skip foundational work to rush into decorative UI.
+
+19. FINAL DELIVERABLES
+
+Deliver a complete, maintainable, production-ready project containing:
+
+The fully implemented multi-page corporate website.
+
+The functional job portal.
+
+Candidate registration and authentication.
+
+Candidate profiles and private CV uploads.
+
+Job applications and application tracking.
+
+The secure administrative dashboard.
+
+Functional vacancy management.
+
+Employer staffing-request and contact forms.
+
+Supabase database migrations and RLS policies.
+
+Responsive UI components and brand styling.
+
+Automated tests for critical workflows.
+
+A safe .env.example.
+
+A complete README with local setup instructions.
+
+Supabase configuration and database setup instructions.
+
+Vercel deployment instructions.
+
+A documented administrator onboarding procedure.
+
+A list of any external provider credentials or configuration still required.
+
+Final instruction
+
+Build the actual working application, not just a visual representation of it.
+
+Prioritize functionality, security, data integrity, exceptional UI/UX, maintainability, accessibility, and deployment reliability.
+
+Make sensible technical decisions independently where details are unspecified, but never invent official company facts, fabricate database records, hardcode credentials, or claim an integration works when it has not been configured and tested.
+
+The final result should feel like a custom-built, premium recruitment platform designed specifically for F&J Workforce Limited, with a distinctive navy, green, and white identity and a clear path from visitor to registered candidate, applicant, recruiter, and administrator.

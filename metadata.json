@@ -1,0 +1,6 @@
+{
+  "name": "F&J Workforce Limited - Recruitment & Staffing Platform",
+  "description": "Enterprise-grade recruitment management platform and corporate workforce website for F&J Workforce Limited in Ibeju-Lekki, Lagos State, Nigeria.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
