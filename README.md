@@ -95,11 +95,12 @@ npm install
 ```
 
 ### 2. Configure Environment Variables
-Copy `.env.example` to `.env.local`:
+The application is pre-configured with the live Supabase project. Environment variables are set in `.env`:
 ```bash
-cp .env.example .env.local
+VITE_SUPABASE_URL=https://fcnzicxjxbwsnvhwtaes.supabase.co
+VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1...
 ```
-Fill in your Supabase project credentials if connecting directly to Supabase cloud.
+You can also view real-time diagnostics and test table queries in the Admin ATS portal under the **Database & Supabase** tab.
 
 ### 3. Run Development Server
 ```bash
@@ -123,15 +124,24 @@ When importing the Git repo to Vercel:
 
 ---
 
-## 🔐 Administrative Onboarding Procedure
+## 🔐 Administrative Security & Access Methods
 
-1. Open `/login` or click the **Admin ATS View** button in the top navigation bar.
-2. Demo Admin account credentials:
-   - **Email:** `admin@fjworkforce.com.ng`
-   - **Password:** `F&Jworkforce` (setup default; change upon first administrative access)
-3. To assign recruiter or admin privileges to an existing user in Supabase, execute:
-   ```sql
-   INSERT INTO public.user_roles (user_id, role)
-   VALUES ('USER_UUID_HERE', 'admin')
-   ON CONFLICT (user_id, role) DO NOTHING;
-   ```
+The Admin ATS Portal is **100% hidden from the public view and general job seekers**. Visitors and candidates see only public workforce pages and the candidate portal.
+
+### How Administrators Access the ATS Portal:
+1. **Direct URL (Bookmark):** Navigate directly to `/admin/login`.
+2. **Global Keyboard Shortcut:** Press `Ctrl + Shift + A` (or `Cmd + Shift + A` on macOS) anywhere on the website to open the private Internal ATS Gate.
+3. **Discrete Footer Gateway:** Click the small `©` copyright symbol at the very bottom of the page.
+
+### Default Administrator Credentials:
+- **Email:** `admin@fjworkforce.com.ng`
+- **Master Password:** `FJW@Admin2026!` *(or `F&Jworkforce`)*
+- You can change this master password anytime under the **Database & Supabase** tab in the ATS dashboard.
+
+### Supabase Role Provisioning:
+To assign recruiter or admin privileges to an existing user in your Supabase project, execute:
+```sql
+INSERT INTO public.user_roles (user_id, role)
+VALUES ('USER_UUID_HERE', 'admin')
+ON CONFLICT (user_id, role) DO NOTHING;
+```

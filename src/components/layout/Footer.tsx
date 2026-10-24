@@ -208,15 +208,6 @@ export const Footer: React.FC = () => {
                   Terms of Use
                 </Link>
               </li>
-              <li className="pt-2">
-                <Link
-                  to="/admin"
-                  className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-[11px] text-slate-300 border border-slate-700"
-                >
-                  <ShieldCheck className="w-3.5 h-3.5 text-[#11851E]" />
-                  <span>Admin ATS Portal</span>
-                </Link>
-              </li>
             </ul>
           </div>
         </div>
@@ -226,7 +217,10 @@ export const Footer: React.FC = () => {
       <div className="border-t border-slate-800 bg-[#060e18] py-6 px-4 sm:px-6 text-xs text-slate-400">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
           <p>
-            &copy; {currentYear} F&J Workforce Limited. All rights reserved. Registered under Nigerian Corporate Law.
+            <Link to="/admin/login" className="text-slate-400 hover:text-slate-300 transition-colors" title="Internal Operations Portal">
+              &copy;
+            </Link>{' '}
+            {currentYear} F&J Workforce Limited. All rights reserved. Registered under Nigerian Corporate Law.
           </p>
           <div className="flex items-center gap-6">
             <Link to="/privacy" className="hover:text-white transition-colors">

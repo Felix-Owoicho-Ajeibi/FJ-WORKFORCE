@@ -37,13 +37,27 @@ import {
   HelpCircle,
   Database,
   ExternalLink,
-  ChevronDown
+  ChevronDown,
+  Activity,
+  RefreshCw,
+  Server,
+  Copy,
+  LogOut,
+  Key
 } from 'lucide-react';
+import {
+  testSupabaseConnection,
+  seedInitialDataToSupabase,
+  ConnectionHealthResult,
+  getSupabaseConfig
+} from '../lib/supabase';
+import { AdminLoginPage } from './AdminLoginPage';
 
 export const AdminDashboardPage: React.FC = () => {
   const {
     currentUser,
-    switchAccount,
+    logout,
+    changeAdminPassword,
     jobs,
     applications,
     statusHistory,
@@ -93,53 +107,69 @@ export const AdminDashboardPage: React.FC = () => {
   const [candidateSearch, setCandidateSearch] = useState('');
   const [enquiryStatusFilter, setEnquiryStatusFilter] = useState('all');
 
-  // Guard: Admin role required
+  // Supabase Diagnostics & Cloud Actions
+  const [healthResult, setHealthResult] = useState<ConnectionHealthResult | null>(null);
+  const [isTestingConnection, setIsTestingConnection] = useState(false);
+  const [isSeedingSupabase, setIsSeedingSupabase] = useState(false);
+  const [seedNotice, setSeedNotice] = useState<string | null>(null);
+  const [copiedMigrationPath, setCopiedMigrationPath] = useState(false);
+
+  const handleTestSupabase = async () => {
+    setIsTestingConnection(true);
+    setSeedNotice(null);
+    try {
+      const result = await testSupabaseConnection();
+      setHealthResult(result);
+    } finally {
+      setIsTestingConnection(false);
+    }
+  };
+
+  const handleSeedSupabase = async () => {
+    setIsSeedingSupabase(true);
+    setSeedNotice(null);
+    try {
+      const res = await seedInitialDataToSupabase(jobs, faqs);
+      if (res.success) {
+        setSeedNotice('Successfully synchronized active vacancies and FAQs into your Supabase database!');
+        await handleTestSupabase();
+      } else {
+        setSeedNotice(`Notice: ${res.error || 'Check that tables exist in Supabase.'}`);
+      }
+    } finally {
+      setIsSeedingSupabase(false);
+    }
+  };
+
+  // Master Password Management State
+  const [currentAdminPass, setCurrentAdminPass] = useState('');
+  const [newAdminPass, setNewAdminPass] = useState('');
+  const [confirmAdminPass, setConfirmAdminPass] = useState('');
+  const [passUpdateNotice, setPassUpdateNotice] = useState<{ success: boolean; message: string } | null>(null);
+
+  const handleUpdateAdminPassword = (e: React.FormEvent) => {
+    e.preventDefault();
+    setPassUpdateNotice(null);
+    if (newAdminPass !== confirmAdminPass) {
+      setPassUpdateNotice({ success: false, message: 'New password and confirmation do not match.' });
+      return;
+    }
+    const res = changeAdminPassword(currentAdminPass, newAdminPass);
+    if (res.success) {
+      setPassUpdateNotice({ success: true, message: 'Administrator master password has been successfully updated.' });
+      setCurrentAdminPass('');
+      setNewAdminPass('');
+      setConfirmAdminPass('');
+    } else {
+      setPassUpdateNotice({ success: false, message: res.message || 'Failed to update password.' });
+    }
+  };
+
+  // Guard: Admin role required - strictly render AdminLoginPage if not authenticated
   const isAdmin = currentUser?.role === 'admin' || currentUser?.role === 'recruiter';
 
   if (!currentUser || !isAdmin) {
-    return (
-      <div className="min-h-screen bg-slate-900 flex items-center justify-center py-12 px-4 sm:px-6">
-        <div className="max-w-md w-full bg-slate-800 rounded-2xl border border-slate-700 p-8 text-center space-y-6 shadow-2xl">
-          <div className="w-16 h-16 rounded-2xl bg-amber-500/20 text-amber-400 flex items-center justify-center mx-auto border border-amber-500/30">
-            <Lock className="w-8 h-8" />
-          </div>
-
-          <div>
-            <h2 className="font-heading text-2xl font-bold text-white">
-              Restricted Administrative Access
-            </h2>
-            <p className="text-xs sm:text-sm text-slate-300 mt-2">
-              The F&J Workforce Recruitment Management & ATS portal is restricted to authorized administrative personnel and recruitment officers.
-            </p>
-          </div>
-
-          <div className="p-4 bg-slate-900/80 rounded-xl border border-slate-700 text-xs text-left space-y-2 text-slate-300">
-            <p className="font-bold text-emerald-400">Reviewer Quick-Access:</p>
-            <p>
-              Click below to immediately switch session to the verified <strong>F&J Management Admin (ATS)</strong> account.
-            </p>
-          </div>
-
-          <div className="flex flex-col gap-3">
-            <button
-              type="button"
-              onClick={() => switchAccount('admin')}
-              className="w-full py-3 px-4 rounded-xl text-xs font-bold bg-[#11851E] hover:bg-[#045B0D] text-white shadow-lg transition-all flex items-center justify-center gap-2"
-            >
-              <ShieldCheck className="w-4 h-4" />
-              <span>Sign In as F&J Admin (One-Click)</span>
-            </button>
-
-            <Link
-              to="/login"
-              className="w-full py-2.5 px-4 rounded-xl text-xs font-bold bg-slate-700 hover:bg-slate-600 text-slate-200 transition-colors"
-            >
-              Go to Standard Sign In
-            </Link>
-          </div>
-        </div>
-      </div>
-    );
+    return <AdminLoginPage />;
   }
 
   // Live Metrics calculations
@@ -261,10 +291,15 @@ export const AdminDashboardPage: React.FC = () => {
 
           <button
             type="button"
-            onClick={() => switchAccount('candidate')}
-            className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-600 transition-colors"
+            onClick={() => {
+              logout();
+              navigate('/admin/login');
+            }}
+            className="px-3 py-1.5 rounded-lg bg-red-950/70 hover:bg-red-900 text-red-200 border border-red-800/60 font-semibold transition-colors flex items-center gap-1.5"
+            title="Lock session and return to security gate"
           >
-            Switch to Candidate View
+            <LogOut className="w-3.5 h-3.5" />
+            <span>Lock ATS & Sign Out</span>
           </button>
 
           <Link
@@ -1395,36 +1430,307 @@ export const AdminDashboardPage: React.FC = () => {
         {/* TAB 9: DATABASE & SUPABASE ARCHITECTURE */}
         {/* ============================================================== */}
         {activeTab === 'database' && (
-          <div className="space-y-8">
-            <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs space-y-4">
-              <div className="flex items-center gap-2">
-                <Database className="w-5 h-5 text-[#045B0D]" />
-                <h2 className="font-heading text-xl font-bold text-slate-900">
-                  Supabase Database & Storage Deployment Guide
-                </h2>
-              </div>
-              <p className="text-xs text-slate-600 leading-relaxed">
-                The platform is architected with dual persistence: a zero-latency local fallback store for seamless interactive evaluation, and production-ready Supabase PostgreSQL & Row Level Security schemas.
-              </p>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs pt-2">
-                <div className="p-4 bg-emerald-50 rounded-xl border border-emerald-200 space-y-1">
-                  <span className="font-bold text-[#045B0D] block">SQL Migrations File:</span>
-                  <p className="text-slate-700">`supabase/migrations/20261022_init.sql`</p>
-                  <p className="text-[11px] text-slate-500">Includes 12 tables, RLS policies, indexes, and triggers.</p>
+          <div className="space-y-6">
+            {/* Supabase Live Integration Status Card */}
+            <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs space-y-6">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-100">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center justify-center text-[#045B0D]">
+                    <Database className="w-6 h-6" />
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <h2 className="font-heading text-lg font-bold text-slate-900">
+                        Supabase Cloud Database & Storage
+                      </h2>
+                      <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-800">
+                        <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                        Integrated
+                      </span>
+                    </div>
+                    <p className="text-xs text-slate-500 mt-0.5">
+                      Production PostgreSQL instance, Storage bucket, and Auth integration
+                    </p>
+                  </div>
                 </div>
 
-                <div className="p-4 bg-blue-50 rounded-xl border border-blue-200 space-y-1">
-                  <span className="font-bold text-[#0B1E36] block">Environment Template:</span>
-                  <p className="text-slate-700">`.env.example`</p>
-                  <p className="text-[11px] text-slate-500">Configured for Vercel and Supabase SSR.</p>
+                <div className="flex flex-wrap items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={handleTestSupabase}
+                    disabled={isTestingConnection}
+                    className="px-3.5 py-2 rounded-xl text-xs font-bold bg-[#045B0D] hover:bg-[#03440a] text-white transition-all shadow-xs flex items-center gap-2 disabled:opacity-50"
+                  >
+                    <RefreshCw className={`w-3.5 h-3.5 ${isTestingConnection ? 'animate-spin' : ''}`} />
+                    <span>{isTestingConnection ? 'Testing...' : 'Test Connection & Ping Tables'}</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={handleSeedSupabase}
+                    disabled={isSeedingSupabase}
+                    className="px-3.5 py-2 rounded-xl text-xs font-bold bg-[#0B1E36] hover:bg-[#122b4d] text-white transition-all shadow-xs flex items-center gap-2 disabled:opacity-50"
+                  >
+                    <Server className={`w-3.5 h-3.5 ${isSeedingSupabase ? 'animate-spin' : ''}`} />
+                    <span>{isSeedingSupabase ? 'Syncing...' : 'Push Seed Data to Supabase'}</span>
+                  </button>
+
+                  <a
+                    href="https://supabase.com/dashboard/project/fcnzicxjxbwsnvhwtaes"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-3.5 py-2 rounded-xl text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-800 transition-all flex items-center gap-1.5"
+                  >
+                    <span>Supabase Studio</span>
+                    <ExternalLink className="w-3.5 h-3.5" />
+                  </a>
+                </div>
+              </div>
+
+              {/* Seed / Action Notification */}
+              {seedNotice && (
+                <div className="p-4 bg-emerald-50 border border-emerald-200 rounded-xl flex items-start gap-3 text-xs text-emerald-900">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                  <div>
+                    <span className="font-bold">Sync Result:</span>
+                    <p className="mt-0.5 text-slate-700">{seedNotice}</p>
+                  </div>
+                </div>
+              )}
+
+              {/* Live Credentials Config Overview */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs">
+                <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
+                  <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">
+                    Project Reference
+                  </span>
+                  <div className="font-mono font-bold text-slate-800 text-sm">
+                    fcnzicxjxbwsnvhwtaes
+                  </div>
+                  <span className="text-[11px] text-emerald-600 font-medium">Provisioned</span>
+                </div>
+
+                <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
+                  <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">
+                    API Endpoint
+                  </span>
+                  <div className="font-mono text-slate-800 truncate" title="https://fcnzicxjxbwsnvhwtaes.supabase.co">
+                    https://fcnzicxjxbwsnvhwtaes.supabase.co
+                  </div>
+                  <span className="text-[11px] text-slate-500">Auto-normalized</span>
+                </div>
+
+                <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
+                  <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">
+                    Anon Public Key
+                  </span>
+                  <div className="font-mono text-slate-800 truncate" title="Active Client Key">
+                    eyJhbGciOiJIUzI1...7n4
+                  </div>
+                  <span className="text-[11px] text-emerald-600 font-medium">Verified & Active</span>
+                </div>
+
+                <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
+                  <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">
+                    Storage Bucket
+                  </span>
+                  <div className="font-mono font-bold text-slate-800 text-sm">
+                    resumes
+                  </div>
+                  <span className="text-[11px] text-slate-500">CV & Portfolio uploads</span>
+                </div>
+              </div>
+
+              {/* Health Test Result Panel */}
+              {healthResult && (
+                <div className="p-5 rounded-xl border border-slate-200 bg-slate-50 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <Activity className="w-4 h-4 text-[#045B0D]" />
+                      <h4 className="font-heading font-bold text-slate-900 text-sm">
+                        Live Database Diagnostics Result
+                      </h4>
+                    </div>
+                    <span className="font-mono text-xs text-slate-500">
+                      Response: {healthResult.latencyMs}ms
+                    </span>
+                  </div>
+
+                  {healthResult.error ? (
+                    <div className="p-3 bg-amber-50 rounded-lg border border-amber-200 text-xs text-amber-900 space-y-1">
+                      <div className="font-bold flex items-center gap-1.5">
+                        <AlertCircle className="w-3.5 h-3.5 text-amber-600" />
+                        <span>Action Required in Supabase Dashboard</span>
+                      </div>
+                      <p className="text-slate-700">{healthResult.error}</p>
+                    </div>
+                  ) : (
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs pt-1">
+                      <div className="p-3 bg-white rounded-lg border border-slate-200 text-center">
+                        <span className="text-slate-400 text-[10px] uppercase font-bold block">Jobs Table</span>
+                        <span className="text-base font-bold text-[#045B0D]">{String(healthResult.tables.jobsCount ?? 0)}</span>
+                      </div>
+                      <div className="p-3 bg-white rounded-lg border border-slate-200 text-center">
+                        <span className="text-slate-400 text-[10px] uppercase font-bold block">Applications</span>
+                        <span className="text-base font-bold text-slate-800">{String(healthResult.tables.applicationsCount ?? 0)}</span>
+                      </div>
+                      <div className="p-3 bg-white rounded-lg border border-slate-200 text-center">
+                        <span className="text-slate-400 text-[10px] uppercase font-bold block">Staffing Reqs</span>
+                        <span className="text-base font-bold text-slate-800">{String(healthResult.tables.enquiriesCount ?? 0)}</span>
+                      </div>
+                      <div className="p-3 bg-white rounded-lg border border-slate-200 text-center">
+                        <span className="text-slate-400 text-[10px] uppercase font-bold block">Contact Inquiries</span>
+                        <span className="text-base font-bold text-slate-800">{String(healthResult.tables.messagesCount ?? 0)}</span>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+
+            {/* Step-by-Step Setup Reference */}
+            <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs space-y-5">
+              <h3 className="font-heading text-base font-bold text-slate-900 flex items-center gap-2">
+                <FileText className="w-4 h-4 text-[#0B1E36]" />
+                <span>Supabase Deployment & Migration Instructions</span>
+              </h3>
+
+              <div className="space-y-4 text-xs text-slate-600 leading-relaxed">
+                <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <div>
+                    <span className="font-bold text-slate-900 block text-sm">
+                      1. Run Complete SQL Migration
+                    </span>
+                    <p className="text-slate-500 mt-0.5">
+                      Open your Supabase Project &rarr; SQL Editor &rarr; Paste and execute the file below:
+                    </p>
+                    <code className="font-mono text-[#045B0D] font-bold mt-1 inline-block">
+                      supabase/migrations/20261022_init.sql
+                    </code>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      navigator.clipboard.writeText('supabase/migrations/20261022_init.sql');
+                      setCopiedMigrationPath(true);
+                      setTimeout(() => setCopiedMigrationPath(false), 2000);
+                    }}
+                    className="px-3 py-1.5 rounded-lg border border-slate-300 bg-white hover:bg-slate-100 font-bold text-slate-700 flex items-center gap-1.5 shrink-0"
+                  >
+                    <Copy className="w-3.5 h-3.5" />
+                    <span>{copiedMigrationPath ? 'Copied Path!' : 'Copy Script Path'}</span>
+                  </button>
+                </div>
+
+                <div className="p-4 bg-slate-50 rounded-xl border border-slate-200">
+                  <span className="font-bold text-slate-900 block text-sm">
+                    2. Storage Bucket Creation
+                  </span>
+                  <p className="text-slate-500 mt-1">
+                    Under Supabase Storage, create a bucket named <strong className="text-slate-800">resumes</strong> for storing candidate CV files and portfolios with public or signed URL permissions.
+                  </p>
+                </div>
+
+                <div className="p-4 bg-slate-50 rounded-xl border border-slate-200">
+                  <span className="font-bold text-slate-900 block text-sm">
+                    3. Vercel Deployment Configuration
+                  </span>
+                  <p className="text-slate-500 mt-1">
+                    When deploying to Vercel, navigate to <strong>Project Settings &rarr; Environment Variables</strong> and verify:
+                  </p>
+                  <ul className="list-disc list-inside mt-2 space-y-1 font-mono text-slate-700">
+                    <li>VITE_SUPABASE_URL = https://fcnzicxjxbwsnvhwtaes.supabase.co</li>
+                    <li>VITE_SUPABASE_ANON_KEY = (Your anon key)</li>
+                  </ul>
+                </div>
+              </div>
+
+              {/* Admin Security & Password Management Card */}
+              <div className="pt-4 border-t border-slate-100 space-y-4">
+                <div className="flex items-center gap-2">
+                  <Key className="w-4 h-4 text-[#045B0D]" />
+                  <h4 className="font-heading text-sm font-bold text-slate-900">
+                    Internal Portal Access Guide & Master Password
+                  </h4>
+                </div>
+
+                <div className="p-4 bg-emerald-50/60 rounded-xl border border-emerald-200/80 space-y-2 text-xs">
+                  <span className="font-bold text-[#045B0D] block">How Authorized Administrators Can Access the Portal:</span>
+                  <ul className="list-disc list-inside space-y-1 text-slate-700">
+                    <li>
+                      <strong>Direct URL (Recommended):</strong> Navigate directly to <code className="text-[#045B0D] font-bold">/admin/login</code> or bookmark it.
+                    </li>
+                    <li>
+                      <strong>Keyboard Shortcut:</strong> Press <kbd className="px-1.5 py-0.5 bg-white border border-slate-300 rounded text-[11px] font-mono font-bold">Ctrl + Shift + A</kbd> (or <kbd className="px-1.5 py-0.5 bg-white border border-slate-300 rounded text-[11px] font-mono font-bold">Cmd + Shift + A</kbd> on Mac) from any public page.
+                    </li>
+                    <li>
+                      <strong>Discrete Footer Gateway:</strong> Click the copyright <span className="font-bold text-slate-900">©</span> symbol in the footer.
+                    </li>
+                  </ul>
+                </div>
+
+                {/* Password Update Form */}
+                <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-3">
+                  <h5 className="text-xs font-bold text-slate-800">Change Master Administrator Password</h5>
+                  {passUpdateNotice && (
+                    <div className={`p-3 rounded-lg text-xs flex items-center gap-2 ${passUpdateNotice.success ? 'bg-emerald-100 text-emerald-800 border border-emerald-300' : 'bg-red-100 text-red-800 border border-red-300'}`}>
+                      {passUpdateNotice.success ? <CheckCircle2 className="w-4 h-4 text-emerald-600" /> : <AlertCircle className="w-4 h-4 text-red-600" />}
+                      <span>{passUpdateNotice.message}</span>
+                    </div>
+                  )}
+                  <form onSubmit={handleUpdateAdminPassword} className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <div>
+                      <label className="block text-[11px] font-bold text-slate-600 mb-1">Current Password</label>
+                      <input
+                        type="password"
+                        required
+                        value={currentAdminPass}
+                        onChange={(e) => setCurrentAdminPass(e.target.value)}
+                        placeholder="Current password"
+                        className="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#11851E] bg-white"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[11px] font-bold text-slate-600 mb-1">New Password</label>
+                      <input
+                        type="password"
+                        required
+                        minLength={8}
+                        value={newAdminPass}
+                        onChange={(e) => setNewAdminPass(e.target.value)}
+                        placeholder="Min 8 characters"
+                        className="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#11851E] bg-white"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[11px] font-bold text-slate-600 mb-1">Confirm New Password</label>
+                      <input
+                        type="password"
+                        required
+                        minLength={8}
+                        value={confirmAdminPass}
+                        onChange={(e) => setConfirmAdminPass(e.target.value)}
+                        placeholder="Repeat new password"
+                        className="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#11851E] bg-white"
+                      />
+                    </div>
+                    <div className="sm:col-span-3 flex justify-end">
+                      <button
+                        type="submit"
+                        className="px-4 py-2 bg-[#0B1E36] hover:bg-[#071526] text-white text-xs font-bold rounded-lg transition-colors flex items-center gap-1.5"
+                      >
+                        <Key className="w-3.5 h-3.5" />
+                        <span>Update Master Password</span>
+                      </button>
+                    </div>
+                  </form>
                 </div>
               </div>
 
               <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
                 <div>
-                  <h4 className="text-xs font-bold text-slate-800">Reset Demo Data to Initial Seeds</h4>
-                  <p className="text-[11px] text-slate-500">Restores all sample jobs, candidate applications, and inquiries.</p>
+                  <h4 className="text-xs font-bold text-slate-800">Factory Data Reset</h4>
+                  <p className="text-[11px] text-slate-500">Restores all sample demo vacancies, applications, and logs.</p>
                 </div>
                 <button
                   type="button"

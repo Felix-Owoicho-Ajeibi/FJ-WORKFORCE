@@ -25,6 +25,7 @@ import { FAQPage } from './pages/FAQPage';
 import { PrivacyPolicyPage } from './pages/PrivacyPolicyPage';
 import { TermsPage } from './pages/TermsPage';
 import { AdminDashboardPage } from './pages/AdminDashboardPage';
+import { AdminLoginPage } from './pages/AdminLoginPage';
 
 const AppContent: React.FC = () => {
   const { path } = useRouter();
@@ -74,6 +75,9 @@ const AppContent: React.FC = () => {
     pageComponent = <PrivacyPolicyPage />;
   } else if (path === '/terms') {
     pageComponent = <TermsPage />;
+  } else if (path === '/admin/login') {
+    pageComponent = <AdminLoginPage />;
+    showHeaderFooter = false;
   } else if (path.startsWith('/admin')) {
     pageComponent = <AdminDashboardPage />;
     showHeaderFooter = false; // Admin has its own dedicated console header/navigation

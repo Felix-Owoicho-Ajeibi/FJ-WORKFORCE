@@ -20,7 +20,7 @@ import {
 } from 'lucide-react';
 
 export const Header: React.FC = () => {
-  const { currentUser, logout, switchAccount } = useStore();
+  const { currentUser, logout } = useStore();
   const { path, navigate } = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [servicesDropdownOpen, setServicesDropdownOpen] = useState(false);
@@ -48,6 +48,18 @@ export const Header: React.FC = () => {
     setServicesDropdownOpen(false);
     setUserDropdownOpen(false);
   }, [path]);
+
+  // Discrete administrator shortcut: Ctrl+Shift+A (or Cmd+Shift+A) opens /admin/login
+  useEffect(() => {
+    function handleKeyDown(e: KeyboardEvent) {
+      if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'A' || e.key === 'a')) {
+        e.preventDefault();
+        navigate('/admin/login');
+      }
+    }
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [navigate]);
 
   const serviceLinks = [
     { name: 'Recruitment & Talent Acquisition', href: '/services/recruitment', desc: 'Direct-hire & specialized placement' },
@@ -85,49 +97,16 @@ export const Header: React.FC = () => {
             </span>
           </div>
 
-          {/* Role switcher & quick tester helper */}
-          <div className="flex items-center gap-2 sm:gap-3 text-[11px]">
-            <span className="text-slate-400 hidden sm:inline">Active View:</span>
-            {currentUser?.role === 'admin' ? (
-              <span className="bg-[#11851E] text-white px-2 py-0.5 rounded font-medium flex items-center gap-1">
-                <Shield className="w-3 h-3" /> Admin (ATS)
-              </span>
-            ) : currentUser?.role === 'candidate' ? (
-              <span className="bg-blue-600 text-white px-2 py-0.5 rounded font-medium flex items-center gap-1">
-                <UserIcon className="w-3 h-3" /> Candidate
-              </span>
-            ) : (
-              <span className="bg-slate-700 text-slate-300 px-2 py-0.5 rounded font-medium">
-                Visitor
-              </span>
-            )}
-
-            <div className="flex items-center gap-1 bg-slate-800/80 p-0.5 rounded border border-slate-700">
-              <button
-                type="button"
-                onClick={() => switchAccount('candidate')}
-                className={`px-2 py-0.5 rounded transition-colors text-[10px] ${
-                  currentUser?.role === 'candidate'
-                    ? 'bg-blue-600 text-white font-semibold'
-                    : 'text-slate-300 hover:text-white'
-                }`}
-                title="Switch to Demo Candidate (Oluwaseun Adeyemi)"
-              >
-                Candidate View
-              </button>
-              <button
-                type="button"
-                onClick={() => switchAccount('admin')}
-                className={`px-2 py-0.5 rounded transition-colors text-[10px] ${
-                  currentUser?.role === 'admin'
-                    ? 'bg-[#11851E] text-white font-semibold'
-                    : 'text-slate-300 hover:text-white'
-                }`}
-                title="Switch to Demo Admin / Recruiter ATS"
-              >
-                Admin ATS View
-              </button>
-            </div>
+          {/* Operating Hours & Hub Status */}
+          <div className="flex items-center gap-3 sm:gap-4 text-[11px] text-slate-300">
+            <span className="hidden sm:inline text-slate-400">
+              Hours: Mon – Fri (8:00 AM – 5:00 PM)
+            </span>
+            <span className="text-slate-600 hidden sm:inline">|</span>
+            <span className="flex items-center gap-1.5 text-emerald-400 font-medium">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              Ibeju-Lekki Hub Active
+            </span>
           </div>
         </div>
       </div>

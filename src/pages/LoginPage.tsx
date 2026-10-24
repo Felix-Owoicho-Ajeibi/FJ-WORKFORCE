@@ -44,7 +44,7 @@ export const LoginPage: React.FC = () => {
     setIsLoading(true);
 
     try {
-      const res = login(email);
+      const res = login(email, password);
       if (!res.success) {
         setErrorMsg(res.message || 'Invalid email or password.');
         setIsLoading(false);
@@ -64,17 +64,6 @@ export const LoginPage: React.FC = () => {
     }
   };
 
-  const handleQuickDemoLogin = (role: 'candidate' | 'admin') => {
-    switchAccount(role);
-    if (redirectUrl) {
-      navigate(redirectUrl);
-    } else if (role === 'admin') {
-      navigate('/admin');
-    } else {
-      navigate('/candidate/dashboard');
-    }
-  };
-
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md text-center">
@@ -82,40 +71,14 @@ export const LoginPage: React.FC = () => {
           <Logo size="lg" />
         </div>
         <h2 className="font-heading text-2xl sm:text-3xl font-extrabold text-[#0B1E36]">
-          Sign In to Your Account
+          Candidate Portal Sign In
         </h2>
         <p className="mt-2 text-xs sm:text-sm text-slate-600">
-          Access your Candidate Dashboard or Administrative ATS Portal.
+          Sign in to track your job applications, view status updates, and manage your CV.
         </p>
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md space-y-6">
-        {/* Quick Demo Login Preset Bar */}
-        <div className="bg-emerald-50/80 border border-emerald-200 rounded-2xl p-4 text-xs">
-          <p className="font-bold text-[#045B0D] flex items-center gap-1.5 mb-2">
-            <KeyRound className="w-3.5 h-3.5" />
-            Quick Evaluator One-Click Sign In:
-          </p>
-          <div className="grid grid-cols-2 gap-2">
-            <button
-              type="button"
-              onClick={() => handleQuickDemoLogin('candidate')}
-              className="py-2 px-3 bg-white hover:bg-slate-50 text-slate-800 rounded-lg border border-slate-200 font-semibold text-center transition-colors shadow-2xs"
-            >
-              Sign In as Candidate
-              <span className="block text-[10px] text-slate-400 font-normal">Oluwaseun Adeyemi</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => handleQuickDemoLogin('admin')}
-              className="py-2 px-3 bg-[#0B1E36] hover:bg-[#071526] text-white rounded-lg font-semibold text-center transition-colors shadow-2xs"
-            >
-              Sign In as Admin
-              <span className="block text-[10px] text-emerald-300 font-normal">F&J Recruiter ATS</span>
-            </button>
-          </div>
-        </div>
-
         {/* Regular Sign In Form */}
         <div className="bg-white py-8 px-6 sm:px-10 rounded-2xl border border-slate-200 shadow-sm">
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -190,13 +153,18 @@ export const LoginPage: React.FC = () => {
               )}
             </button>
 
-            <div className="text-center pt-2">
+            <div className="text-center pt-2 space-y-3">
               <p className="text-xs text-slate-600">
                 Don’t have an account yet?{' '}
                 <Link to="/register" className="font-bold text-[#045B0D] hover:underline">
                   Create Candidate Account
                 </Link>
               </p>
+              <div className="pt-2 border-t border-slate-100">
+                <Link to="/admin/login" className="text-[11px] text-slate-400 hover:text-slate-600 transition-colors">
+                  F&J Staff & Recruiter Portal &rarr;
+                </Link>
+              </div>
             </div>
           </form>
         </div>

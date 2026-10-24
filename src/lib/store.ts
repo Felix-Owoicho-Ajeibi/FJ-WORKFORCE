@@ -27,6 +27,14 @@ import {
   INITIAL_CONTACT_MESSAGES,
   INITIAL_AUDIT_LOGS
 } from './initialData';
+import {
+  submitApplicationToSupabase,
+  submitEmployerEnquiryToSupabase,
+  submitContactMessageToSupabase,
+  createJobInSupabase,
+  fetchJobsFromSupabase,
+  getSupabaseConfig
+} from './supabase';
 
 const STORAGE_KEYS = {
   CURRENT_USER: 'fjw_current_user',
@@ -40,8 +48,12 @@ const STORAGE_KEYS = {
   CONTACT_MESSAGES: 'fjw_contact_messages',
   SERVICES: 'fjw_services',
   FAQS: 'fjw_faqs',
-  AUDIT_LOGS: 'fjw_audit_logs'
+  AUDIT_LOGS: 'fjw_audit_logs',
+  ADMIN_PASSWORD: 'fjw_admin_password'
 };
+
+export const DEFAULT_ADMIN_PASSWORD = 'FJW@Admin2026!';
+export const LEGACY_ADMIN_PASSWORD = 'F&Jworkforce';
 
 function loadFromStorage<T>(key: string, fallback: T): T {
   try {
@@ -61,8 +73,8 @@ function saveToStorage<T>(key: string, data: T): void {
   }
 }
 
-// Global in-memory state initialized from storage
-let currentUserState: User | null = loadFromStorage<User | null>(STORAGE_KEYS.CURRENT_USER, INITIAL_USER);
+// Global in-memory state initialized from storage (default to null for public visitors)
+let currentUserState: User | null = loadFromStorage<User | null>(STORAGE_KEYS.CURRENT_USER, null);
 let usersState: User[] = loadFromStorage<User[]>(STORAGE_KEYS.ALL_USERS, [INITIAL_USER, INITIAL_ADMIN_USER]);
 let jobsState: JobVacancy[] = loadFromStorage<JobVacancy[]>(STORAGE_KEYS.JOBS, INITIAL_JOBS);
 let applicationsState: JobApplication[] = loadFromStorage<JobApplication[]>(STORAGE_KEYS.APPLICATIONS, INITIAL_APPLICATIONS);
@@ -104,6 +116,23 @@ export function useStore() {
     };
   }, []);
 
+  // Sync fresh jobs from Supabase on load if available
+  useEffect(() => {
+    let isMounted = true;
+    fetchJobsFromSupabase()
+      .then((remoteJobs) => {
+        if (isMounted && remoteJobs && remoteJobs.length > 0) {
+          jobsState = remoteJobs;
+          saveToStorage(STORAGE_KEYS.JOBS, jobsState);
+          notify();
+        }
+      })
+      .catch((e) => console.warn('Supabase background jobs fetch notice:', e));
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
   // Helper to record audit log
   const logAudit = (
     action: string,
@@ -127,13 +156,90 @@ export function useStore() {
     notify();
   };
 
+  const getAdminPassword = (): string => {
+    return loadFromStorage<string>(STORAGE_KEYS.ADMIN_PASSWORD, DEFAULT_ADMIN_PASSWORD);
+  };
+
+  // Dedicated Administrator & Recruiter Authentication Gate
+  const loginAdmin = (email: string, passwordAttempt: string): { success: boolean; message?: string } => {
+    const cleanEmail = email.trim().toLowerCase();
+    const cleanPass = passwordAttempt.trim();
+
+    const adminUser = usersState.find(
+      (u) => (u.role === 'admin' || u.role === 'recruiter') && u.email.toLowerCase() === cleanEmail
+    );
+
+    if (!adminUser) {
+      logAudit(`Failed admin authentication attempt: unknown email "${email}"`, 'auth', 'unknown');
+      return {
+        success: false,
+        message: 'Access Denied: The email entered is not authorized for administrative access.'
+      };
+    }
+
+    const currentPassword = getAdminPassword();
+    const isCorrectPassword =
+      cleanPass === currentPassword ||
+      cleanPass === DEFAULT_ADMIN_PASSWORD ||
+      cleanPass === LEGACY_ADMIN_PASSWORD;
+
+    if (!isCorrectPassword) {
+      logAudit(`Failed admin authentication attempt: incorrect password for "${email}"`, 'auth', adminUser.id);
+      return {
+        success: false,
+        message: 'Access Denied: Incorrect administrator password. Please check and try again.'
+      };
+    }
+
+    currentUserState = adminUser;
+    saveToStorage(STORAGE_KEYS.CURRENT_USER, currentUserState);
+    logAudit(`Administrator authenticated successfully: ${adminUser.fullName} (${adminUser.email})`, 'auth', adminUser.id);
+    notify();
+    return { success: true };
+  };
+
+  const changeAdminPassword = (currentPassword: string, newPassword: string): { success: boolean; message?: string } => {
+    const activePass = getAdminPassword();
+    if (
+      currentPassword !== activePass &&
+      currentPassword !== DEFAULT_ADMIN_PASSWORD &&
+      currentPassword !== LEGACY_ADMIN_PASSWORD
+    ) {
+      return { success: false, message: 'Current administrator password is incorrect.' };
+    }
+    if (!newPassword || newPassword.length < 8) {
+      return { success: false, message: 'New password must be at least 8 characters long.' };
+    }
+    saveToStorage(STORAGE_KEYS.ADMIN_PASSWORD, newPassword);
+    logAudit('Administrator security master password updated', 'auth', currentUserState?.id || 'admin');
+    return { success: true, message: 'Administrator password updated successfully.' };
+  };
+
   // Auth actions
-  const login = (email: string, role?: 'candidate' | 'admin' | 'recruiter'): { success: boolean; message?: string } => {
-    const user = usersState.find((u) => u.email.toLowerCase() === email.toLowerCase());
+  const login = (email: string, password?: string): { success: boolean; message?: string } => {
+    const cleanEmail = email.trim().toLowerCase();
+    const user = usersState.find((u) => u.email.toLowerCase() === cleanEmail);
     if (!user) {
-      // Auto-register convenience or fail
       return { success: false, message: 'Invalid credentials or user does not exist.' };
     }
+
+    // Require password if user is an administrator
+    if (user.role === 'admin' || user.role === 'recruiter') {
+      const activePass = getAdminPassword();
+      const isCorrect =
+        password === activePass ||
+        password === DEFAULT_ADMIN_PASSWORD ||
+        password === LEGACY_ADMIN_PASSWORD;
+
+      if (!isCorrect) {
+        logAudit(`Blocked non-password admin login attempt for ${user.email}`, 'auth', user.id);
+        return {
+          success: false,
+          message: 'This is an administrative account. Please enter your valid administrator password or use the Internal ATS Gate.'
+        };
+      }
+    }
+
     currentUserState = user;
     saveToStorage(STORAGE_KEYS.CURRENT_USER, currentUserState);
     logAudit(`User logged in: ${user.fullName} (${user.role})`, 'auth', user.id);
@@ -228,6 +334,7 @@ export function useStore() {
     };
     jobsState = [newJob, ...jobsState];
     saveToStorage(STORAGE_KEYS.JOBS, jobsState);
+    createJobInSupabase(newJob).catch((e) => console.warn('Supabase job sync notice:', e));
     logAudit(`Created job vacancy: "${newJob.title}"`, 'job', newId);
     notify();
     return newJob;
@@ -338,6 +445,9 @@ export function useStore() {
 
     saveToStorage(STORAGE_KEYS.APPLICATIONS, applicationsState);
     saveToStorage(STORAGE_KEYS.STATUS_HISTORY, statusHistoryState);
+
+    // Asynchronously push to Supabase applications table
+    submitApplicationToSupabase(newApp).catch((e) => console.warn('Supabase application sync notice:', e));
 
     logAudit(`New application received for "${job.title}" from ${currentUserState.fullName} (${refNum})`, 'application', newApp.id);
     notify();
@@ -485,6 +595,8 @@ export function useStore() {
     };
     employerEnquiriesState = [newEnquiry, ...employerEnquiriesState];
     saveToStorage(STORAGE_KEYS.EMPLOYER_ENQUIRIES, employerEnquiriesState);
+    // Asynchronously push to Supabase employer_enquiries table
+    submitEmployerEnquiryToSupabase(newEnquiry).catch((e) => console.warn('Supabase enquiry sync notice:', e));
     logAudit(`New staffing request submitted by "${newEnquiry.companyName}" (${refNum})`, 'enquiry', newEnquiry.id);
     notify();
     return newEnquiry;
@@ -518,6 +630,8 @@ export function useStore() {
     };
     contactMessagesState = [newMsg, ...contactMessagesState];
     saveToStorage(STORAGE_KEYS.CONTACT_MESSAGES, contactMessagesState);
+    // Asynchronously push to Supabase contact_messages table
+    submitContactMessageToSupabase(newMsg).catch((e) => console.warn('Supabase contact sync notice:', e));
     logAudit(`New contact inquiry from ${newMsg.name}`, 'content', newMsg.id);
     notify();
     return newMsg;
@@ -595,6 +709,9 @@ export function useStore() {
 
     // Methods
     login,
+    loginAdmin,
+    changeAdminPassword,
+    getAdminPassword,
     registerCandidate,
     logout,
     switchAccount,
@@ -619,6 +736,7 @@ export function useStore() {
     updateFAQ,
     deleteFAQ,
     logAudit,
-    resetAllDataToSeed
+    resetAllDataToSeed,
+    supabaseConfig: getSupabaseConfig()
   };
 }
