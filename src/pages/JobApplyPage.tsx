@@ -480,7 +480,7 @@ export const JobApplyPage: React.FC<JobApplyPageProps> = ({ slug }) => {
               <div>
                 <p className="font-bold text-amber-900">Application Fee Notice</p>
                 <p className="mt-0.5 leading-relaxed">
-                  Notice: Recruitment at F&J Workforce is 100% paid. Application fee of 5,000 Naira = $3.8 applied. This covers candidate pre-screening, credential auditing, and priority profile presentation to client interview panels.
+                  Notice: Recruitment at F&J Workforce is 100% paid. Application fee of 5,000 Naira ($3.8) applied. This covers candidate pre-screening, credential auditing, and priority profile presentation to client interview panels.
                 </p>
               </div>
             </div>
@@ -494,7 +494,7 @@ export const JobApplyPage: React.FC<JobApplyPageProps> = ({ slug }) => {
                 className="mt-0.5 text-[#045B0D] focus:ring-[#11851E]"
               />
               <span className="text-xs text-slate-600 leading-relaxed">
-                I hereby declare that the information provided is accurate and verifiable. I acknowledge that recruitment at F&J Workforce is 100% paid (Application fee of 5,000 Naira = $3.8 applied), and I consent to F&J Workforce Limited processing my personal records and CV for recruitment and credential verification under the <strong>Nigeria Data Protection Act (NDPA 2023)</strong>.
+                I hereby declare that the information provided is accurate and verifiable. I acknowledge that recruitment at F&J Workforce is 100% paid (Application fee of 5,000 Naira ($3.8) applied), and I consent to F&J Workforce Limited processing my personal records and CV for recruitment and credential verification under the <strong>Nigeria Data Protection Act (NDPA 2023)</strong>.
               </span>
             </label>
           </div>

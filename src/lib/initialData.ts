@@ -462,7 +462,7 @@ export const INITIAL_FAQS: FAQItem[] = [
   {
     id: 'faq-2',
     question: 'What is the application fee for job seekers applying through F&J Workforce?',
-    answer: 'Notice: Recruitment at F&J Workforce is 100% paid. An application fee of 5,000 Naira = $3.8 is applied per application to cover priority screening, technical competency reviews, and credential verification.',
+    answer: 'Notice: Recruitment at F&J Workforce is 100% paid. An application fee of 5,000 Naira ($3.8) is applied per application to cover priority screening, technical competency reviews, and credential verification.',
     category: 'Candidates',
     isPublished: true,
     sortOrder: 2

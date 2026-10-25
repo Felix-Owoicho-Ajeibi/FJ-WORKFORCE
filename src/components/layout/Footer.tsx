@@ -166,7 +166,7 @@ export const Footer: React.FC = () => {
               </li>
               <li className="pt-2">
                 <span className="text-[11px] text-amber-200 block bg-amber-950/70 p-2.5 rounded-lg border border-amber-800/60 leading-relaxed">
-                  ⚠️ <strong>Notice:</strong> Recruitment at F&J Workforce is 100% paid. Application fee of 5,000 Naira = $3.8 applied.
+                  ⚠️ <strong>Notice:</strong> Recruitment at F&J Workforce is 100% paid. Application fee of 5,000 Naira ($3.8) applied.
                 </span>
               </li>
             </ul>

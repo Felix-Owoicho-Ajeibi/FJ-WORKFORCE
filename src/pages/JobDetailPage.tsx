@@ -242,7 +242,7 @@ export const JobDetailPage: React.FC<JobDetailPageProps> = ({ slug }) => {
                   Official Recruitment Notice:
                 </p>
                 <p className="leading-relaxed">
-                  Notice: Recruitment at F&J Workforce is 100% paid. Application fee of 5,000 Naira = $3.8 applied. All applications submitted through our platform undergo priority screening, credential verification, and reference checks.
+                  Notice: Recruitment at F&J Workforce is 100% paid. Application fee of 5,000 Naira ($3.8) applied. All applications submitted through our platform undergo priority screening, credential verification, and reference checks.
                 </p>
               </div>
 

@@ -46,7 +46,7 @@ export const TermsPage: React.FC = () => {
               3. Recruitment Application Fee Policy
             </h2>
             <p className="p-3 bg-amber-50 border border-amber-200 rounded-xl text-amber-950 font-medium">
-              Notice: Recruitment at F&J Workforce is 100% paid. An application fee of 5,000 Naira = $3.8 is applied per candidate application. This fee covers professional credential auditing, technical evaluation dossiers, and priority submission to hiring employers.
+              Notice: Recruitment at F&J Workforce is 100% paid. An application fee of 5,000 Naira ($3.8) is applied per candidate application. This fee covers professional credential auditing, technical evaluation dossiers, and priority submission to hiring employers.
             </p>
           </section>
 
