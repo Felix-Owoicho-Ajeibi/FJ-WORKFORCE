@@ -130,68 +130,59 @@ export const HomePage: React.FC = () => {
               </div>
             </div>
 
-            {/* Right Graphic / Industrial Hub Card */}
+            {/* Right Graphic / Workforce Hero Banner */}
             <div className="lg:col-span-5">
-              <div className="bg-slate-900/90 rounded-2xl border border-slate-700 p-6 shadow-2xl backdrop-blur-sm relative">
-                <div className="flex items-center justify-between pb-4 border-b border-slate-800">
-                  <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 rounded-full bg-red-500" />
-                    <div className="w-3 h-3 rounded-full bg-yellow-500" />
-                    <div className="w-3 h-3 rounded-full bg-emerald-500" />
+              <div className="relative rounded-2xl overflow-hidden border border-slate-700/80 shadow-2xl bg-slate-900 group">
+                {/* Workforce Banner Image Container */}
+                <div className="relative h-72 sm:h-80 md:h-[370px] w-full overflow-hidden bg-slate-950">
+                  <img
+                    src="/src/assets/images/workforce_hero_banner_1793006870400.jpg"
+                    alt="F&J Workforce team at Lagos industrial logistics hub"
+                    referrerPolicy="no-referrer"
+                    className="w-full h-full object-cover object-top transform transition-transform duration-700 group-hover:scale-105"
+                  />
+                  {/* Atmospheric gradient overlay for text readability */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/30 to-transparent" />
+
+                  {/* Floating operational badge at top-left */}
+                  <div className="absolute top-3.5 left-3.5 inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-900/90 backdrop-blur-md border border-white/20 text-white text-xs font-semibold shadow-lg">
+                    <span className="w-2 h-2 rounded-full bg-[#11851E] animate-pulse" />
+                    <span>Lekki Free Zone & Industrial Hub</span>
                   </div>
-                  <span className="text-[11px] font-mono text-slate-400">
-                    Ibeju-Lekki Hub: Active Operations
-                  </span>
+
+                  {/* Floating 100% Pre-Vetted badge at top-right */}
+                  <div className="absolute top-3.5 right-3.5 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-950/90 backdrop-blur-md border border-emerald-500/50 text-emerald-300 text-xs font-bold shadow-lg">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                    <span>100% Pre-Vetted</span>
+                  </div>
+
+                  {/* Bottom Text Overlay */}
+                  <div className="absolute bottom-0 inset-x-0 p-5 text-white">
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-emerald-400 bg-emerald-950/80 px-2.5 py-0.5 rounded border border-emerald-800/60 inline-block mb-1.5">
+                      On-Ground Workforce Operations
+                    </span>
+                    <h3 className="text-base sm:text-lg font-bold text-white leading-snug">
+                      Verified Technical, Factory & Corporate Talent
+                    </h3>
+                    <p className="text-xs text-slate-300 mt-1 line-clamp-2">
+                      Deploying skilled technicians, warehouse crews, and certified personnel across the Ibeju-Lekki industrial belt.
+                    </p>
+                  </div>
                 </div>
 
-                <div className="py-6 space-y-4">
-                  <div className="bg-slate-800/80 rounded-xl p-4 border border-slate-700/80">
-                    <div className="flex items-center justify-between mb-1">
-                      <span className="text-xs font-semibold text-emerald-400 uppercase tracking-wider">
-                        Industrial Corridor Focus
-                      </span>
-                      <span className="text-[11px] bg-emerald-950 text-emerald-300 px-2 py-0.5 rounded border border-emerald-800">
-                        Operational
-                      </span>
-                    </div>
-                    <h4 className="text-sm font-bold text-white">
-                      Lekki Free Zone & Dangote Industrial Belt
-                    </h4>
-                    <p className="text-xs text-slate-400 mt-1">
-                      Supplying verified technicians, forklift operators, safety officers, and warehouse crews with on-site management.
-                    </p>
+                {/* Sub-card: Immediate Assistance Callout */}
+                <div className="p-4 bg-slate-900/95 border-t border-slate-800/80 flex items-center justify-between gap-3">
+                  <div>
+                    <p className="text-xs font-bold text-white">Need immediate staffing mobilization?</p>
+                    <p className="text-[11px] text-emerald-300">Speak directly with our staffing director</p>
                   </div>
-
-                  <div className="bg-slate-800/80 rounded-xl p-4 border border-slate-700/80">
-                    <div className="flex items-center justify-between mb-1">
-                      <span className="text-xs font-semibold text-blue-400 uppercase tracking-wider">
-                        Corporate & Executive Search
-                      </span>
-                      <span className="text-[11px] bg-blue-950 text-blue-300 px-2 py-0.5 rounded border border-blue-800">
-                        90-Day Warranty
-                      </span>
-                    </div>
-                    <h4 className="text-sm font-bold text-white">
-                      Permanent Mid & Senior Management
-                    </h4>
-                    <p className="text-xs text-slate-400 mt-1">
-                      Comprehensive background checks, academic verification, and standardized competency evaluations.
-                    </p>
-                  </div>
-
-                  <div className="p-3 bg-[#045B0D]/20 border border-[#11851E]/30 rounded-xl flex items-center justify-between">
-                    <div>
-                      <p className="text-xs font-bold text-white">Need immediate staffing assistance?</p>
-                      <p className="text-[11px] text-emerald-300">Speak directly with our staffing director</p>
-                    </div>
-                    <a
-                      href="tel:09116176563"
-                      className="px-3 py-1.5 bg-[#11851E] hover:bg-emerald-600 text-white text-xs font-bold rounded-lg transition-colors flex items-center gap-1.5"
-                    >
-                      <PhoneCall className="w-3.5 h-3.5" />
-                      <span>Call Now</span>
-                    </a>
-                  </div>
+                  <a
+                    href="tel:09116176563"
+                    className="px-3.5 py-2 bg-[#11851E] hover:bg-emerald-600 text-white text-xs font-bold rounded-lg transition-colors flex items-center gap-1.5 shrink-0 shadow-sm"
+                  >
+                    <PhoneCall className="w-3.5 h-3.5" />
+                    <span>Call Now</span>
+                  </a>
                 </div>
               </div>
             </div>
