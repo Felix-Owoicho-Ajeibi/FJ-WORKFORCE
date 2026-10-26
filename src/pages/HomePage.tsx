@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from '../lib/router';
 import { useStore } from '../lib/store';
 import { JobCard } from '../components/common/JobCard';
+import workforceHeroBanner from '../assets/images/workforce_hero_banner_1793006870400.jpg';
 import {
   Briefcase,
   Building2,
@@ -136,9 +137,14 @@ export const HomePage: React.FC = () => {
                 {/* Workforce Banner Image Container */}
                 <div className="relative h-72 sm:h-80 md:h-[370px] w-full overflow-hidden bg-slate-950">
                   <img
-                    src="/src/assets/images/workforce_hero_banner_1793006870400.jpg"
+                    src={workforceHeroBanner}
                     alt="F&J Workforce team at Lagos industrial logistics hub"
                     referrerPolicy="no-referrer"
+                    onError={(e) => {
+                      if (e.currentTarget.src !== window.location.origin + '/assets/workforce_hero_banner.jpg') {
+                        e.currentTarget.src = '/assets/workforce_hero_banner.jpg';
+                      }
+                    }}
                     className="w-full h-full object-cover object-top transform transition-transform duration-700 group-hover:scale-105"
                   />
                   {/* Atmospheric gradient overlay for text readability */}
